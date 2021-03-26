@@ -1,3 +1,5 @@
+### Special functions ##########################################################
+
 useDynLib(qrmtools, .registration = TRUE)
 
 
