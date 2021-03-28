@@ -208,12 +208,14 @@ qq_plot <-  function(x, FUN = qnorm, xlab = "Theoretical quantiles", ylab = "Sam
 }
 
 ##' @title Plot of an Empirical Distribution Function
-##' @param x data of which the empirical distribution function is to be plotted
+##' @param x data vector of which the empirical distribution function
+##'        is to be plotted; can also be a matrix in which case each column produces
+##'        on empirical distribution function
 ##' @param do.points logical indicating whether points are to be plotted
 ##' @param log either "" or "x", indicating whether a logarithmic x-axis is used
-##' @param xlim x-axis limits; default avoids possible failure if log = "x"
-##'        and data points are all positive (plot.stepfun() extends the range,
-##'        possibly below 0)
+##' @param xlim x-axis limits
+##' @param ylim y-axis limits
+##' @param col color
 ##' @param main title
 ##' @param xlab x-axis label
 ##' @param ylab y-axis label
@@ -221,24 +223,37 @@ qq_plot <-  function(x, FUN = qnorm, xlab = "Theoretical quantiles", ylab = "Sam
 ##'        see plot.stepfun()
 ##' @return see plot.stepfun()
 ##' @author Marius Hofert
-##' @note MWE:
-##'       x <- 1:100/100
-##'       plot(stepfun(x = x, y = c(0, ecdf(x)(x))), log = "x")
-##'       plot(stepfun(x = x, y = c(0, ecdf(x)(x))), log = "x", xlim = range(x))
-##'       plot.stepfun # => extends the range (below 0)
-##'       Note: - Manually extending the range a little bit to the left
-##'               does not make sense (because of log-scale
-##'               => artificial extension to the left). Best to leave it like this.
-##'             - see ?plot.stepfun
-edf_plot <- function(x, do.points = length(x) <= 100, log = "",
-                     xlim = range(x, na.rm = TRUE),
+edf_plot <- function(x, do.points = nrow(x) <= 100, log = "", xlim = NULL, ylim = NULL,
+                     col = NULL,
                      main = "", xlab = "x", ylab = "Distribution function at x", ...)
 {
-    x <- sort(as.numeric(x)) # required by ecdf()
-    y <- c(0, ecdf(x)(x)) # plot.stepfun() requires 'y' to be one longer than 'x' (y = values *between* x's)
+    if(!is.matrix(x)) x <- cbind(x)
+    d <- ncol(x)
+    stopifnot(d >= 1)
+    x <- apply(x, 2, function(x.) sort(as.numeric(x.))) # required by ecdf()
+    y <- sapply(1:d, function(j) c(0, ecdf(x[,j])(x[,j]))) # plot.stepfun() requires 'y' to be one longer than 'x' (y = values *between* x's)
     ## => log = "y" does not make sense anymore at this point as y[1] = 0
     if(grepl("y", log)) stop('log = "y" not available.')
-    sf <- stepfun(x = x, y = y) # ok, does not extend x-range
-    plot(sf, do.points = do.points, log = log, xlim = xlim,
-         main = main, xlab = xlab, ylab = ylab, ...) # see plot.stepfun(), also for the return value!
+    if(is.null(xlim)) xlim <- range(x, na.rm = TRUE)
+    if(is.null(ylim)) ylim <- c(0, max(y[nrow(y),], na.rm = TRUE))
+    if(is.null(col)) col <- "black"
+    if(length(col) == 1) col <- rep(col, d)
+    ## Plot
+    x0 <- xlim[1] - 0.04 * diff(xlim) # x-value at left endpoint for extending the line y = 0
+    for(j in 1:d) {
+        sf <- stepfun(x = x[,j], y = y[,j])
+        if(j == 1) {
+            plot(sf, log = log, xlim = xlim, ylim = ylim, do.points = do.points, col = col[j],
+                 main = main, xlab = xlab, ylab = ylab, ...) # ... can pass 'verticals = FALSE' (exists for plot.stepfun())
+        } else {
+            plot(sf, add = TRUE, # cannot have 'log' here then
+                 do.points = do.points, col = col[j], ...)
+        }
+        ## Extend the plot(s) to the left (line segment with y = 0).
+        ## This is especially required if log == "x" and d >= 1 or log == "" and d > 1.
+        segments(x0 = x0, y0 = 0, x1 = x[1,j], y1 = 0, col = col[j]) # doesn't pass '...' though (could remove those of plot.stepfun())
+        ## This overplots possibly existing line segments for y = 0 but that's okay
+        ## (and in fact the easiest solution because if log == "x" and d > 1, some line
+        ## segments are already plotted anyways)
+    }
 }
