@@ -22,7 +22,7 @@ importFrom("stats",
            "qqline", "mahalanobis", "ks.test")
 importFrom("grDevices", "colorRampPalette", "dev.off", "extendrange")
 importFrom("graphics", "image", "mtext", "plot", "rug", "abline", "lines",
-           "axis")
+           "axis", "segments")
 importFrom("lattice", "levelplot")
 importFrom("rugarch", "ugarchspec", "ugarchfit")
 importFrom("stats", "quantile", "HoltWinters", "density", "ppoints", "optim")
