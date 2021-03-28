@@ -1,24 +1,26 @@
 \name{edf_plot}
 \alias{edf_plot}
-\title{Plot of an Empirical Distribution Function}
+\title{Plot Empirical Distribution Functions}
 \description{
-  Plotting an empirical distribution function.
+  Plotting empirical distribution functions.
 }
 \usage{
-edf_plot(x, do.points = length(x) <= 100, log = "",
-         xlim = range(x, na.rm = TRUE),
-         main = "", xlab = "x", ylab = "Distribution function at x", ...)
+edf_plot(x, do.points = nrow(x) <= 100, log = "", xlim = NULL, ylim = NULL,
+         col = NULL, main = "", xlab = "x", ylab = "Distribution function at x",
+         ...)
 }
 \arguments{
   \item{x}{\code{\link{numeric}} vector of data (of which the empirical
-    distribution function is to be plotted).}
+    distribution function is to be plotted). Can also be a \code{\link{matrix}}
+    in which case each column corresponds to one empirical distribution function.}
   \item{do.points}{\code{\link{logical}} indicating whether points are
     to be plotted; see \code{?plot.stepfun}.}
   \item{log}{\code{\link{character}} indicating whether
      a logarithmic x-axis is used (available are only \code{""} and \code{"x"}).}
-  \item{xlim}{x-axis limits; default \code{range(x)} avoids possible failure if
-    \code{log = "x"} and data points are all positive
-    (\code{\link{plot.stepfun}()} extends the range, possibly below 0).}
+  \item{xlim}{x-axis limits; defaults to the range of \code{x}.}
+  \item{ylim}{y-axis limits; the lower bound defaults to 0, the upper to
+    the maximal height of the empiricial distribution function(s).}
+  \item{col}{color(s).}
   \item{main}{title.}
   \item{xlab}{x-axis label.}
   \item{ylab}{y-axis label.}
@@ -26,16 +28,16 @@ edf_plot(x, do.points = length(x) <= 100, log = "",
     \code{\link{plot.stepfun}()}.}
 }
 \value{
-  Returns the return value of the underlying \code{\link{plot.stepfun}()}.
+  Nothing (plot by side-effect).
 }
 \author{Marius Hofert}
 \examples{
 x <- c(5, 2, 4, 2, 3, 2, 2, 2, 1, 2) # example data
+edf_plot(x) # the default
 edf_plot(x, verticals = FALSE) # the 'mathematical' version
 edf_plot(x, do.points = FALSE) # good for many sample points
-edf_plot(x) # the default
-edf_plot(x, log = "x") # logarithmic
-(edf_plot(x, log = "x")) # ... with return value
-## Note: flat part below first jump cannot be shown in log-scale
+edf_plot(x, log = "x") # logarithmic; cannot show flat part before first jump
+edf_plot(cbind(x, x+2), col = c("black", "royalblue3")) # plots both empirical distributions
+edf_plot(cbind(x, x+2), log = "x", col = c("black", "royalblue3"))
 }
 \keyword{hplot}
