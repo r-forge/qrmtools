@@ -54,7 +54,7 @@ export(
     "Black_Scholes", "Black_Scholes_Greeks",
     ## General graphics
     "NA_plot", "matrix_plot", "matrix_density_plot",
-    "pp_plot", "qq_plot", "edf_plot",
+    "pp_plot", "qq_plot", "stepfun_plot", "edf_plot",
     ## Time Series
     "fit_ARMA_GARCH", "fit_GARCH_11",
     ## Result/warning/error catching
