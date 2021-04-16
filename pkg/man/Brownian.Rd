@@ -64,8 +64,8 @@ vola <- seq(0.05, 0.20, length.out = d) # volatilities sigma
 r <- 0.01 # risk-free interest rate
 drift <- r - vola^2/2 # marginal drifts
 init <- seq(10, 100, length.out = d) # initial stock prices
-N <- 1000 # number of replications
-n <- 250 # number of time intervals
+N <- 100 # number of replications
+n <- 25 # number of time intervals
 t <- 0:n/n # time points 0 = t_0 < ... < t_n
 
 ## Simulate N paths of a cross-sectionally dependent d-dimensional
@@ -84,45 +84,44 @@ stopifnot(dim(Z.X) == c(N, n, d), dim(Z.S) == c(N, n, d))
 ## Note that for BMs, one loses one observation as X_{t_0} = 0 (or some other
 ## fixed value, so there is no random increment there that can be deBrowned.
 
-## If we map the increments back to their copula sample, do we indeed
-## see the copula samples again?
-U.Z.X <- pnorm(Z.X) # map to copula sample
-U.Z.S <- pnorm(Z.S) # map to copula sample
-stopifnot(all.equal(U.Z.X, U.Z.S)) # sanity check
-## Visual check
 \donttest{
-    pairs(U.Z.X[,1,], gap = 0, pch = ".") # check at the first time point of the BM
-    pairs(U.Z.X[,n,], gap = 0, pch = ".") # check at the last time point of the BM
-    pairs(U.Z.S[,1,], gap = 0, pch = ".") # check at the first time point of the GBM
-    pairs(U.Z.S[,n,], gap = 0, pch = ".") # check at the last time point of the GBM
-}
-## Numerical check
-## First convert the (N * n, d)-matrix U to an (N, n, d)-array but in
-## the right way (array(U, dim = c(N, n, d)) would use the U's in the
-## wrong order)
-U. <- aperm(array(U, dim = c(n, N, d)), perm = c(2,1,3))
-## Now compare
-stopifnot(all.equal(U.Z.X, U., check.attributes = FALSE))
-stopifnot(all.equal(U.Z.S, U., check.attributes = FALSE))
-
-## Generate dependent GBM sample paths with quasi-random numbers
-library(qrng)
-set.seed(271)
-U.. <- cCopula(to_array(sobol(N, d = d * n, randomize = "digital.shift"), f = n),
-               copula = tcop, inverse = TRUE)
-S. <- rBrownian(N, t = t, d = d, U = U.., drift = drift, vola = vola,
-                type = "GBM", init = init)
-\donttest{
-    pairs(S [,2,], gap = 0, pch = ".") # pseudo-samples at t_1
-    pairs(S.[,2,], gap = 0, pch = ".") # quasi-samples at t_1
-    pairs(S [,n+1,], gap = 0, pch = ".") # pseudo-samples at t_n
-    pairs(S.[,n+1,], gap = 0, pch = ".") # quasi-samples at t_n
+    ## If we map the increments back to their copula sample, do we indeed
+    ## see the copula samples again?
+    U.Z.X <- pnorm(Z.X) # map to copula sample
+    U.Z.S <- pnorm(Z.S) # map to copula sample
+    stopifnot(all.equal(U.Z.X, U.Z.S)) # sanity check
+    ## Visual check
+    pairs(U.Z.X[,1,], gap = 0) # check at the first time point of the BM
+    pairs(U.Z.X[,n,], gap = 0) # check at the last time point of the BM
+    pairs(U.Z.S[,1,], gap = 0) # check at the first time point of the GBM
+    pairs(U.Z.S[,n,], gap = 0) # check at the last time point of the GBM
+    ## Numerical check
+    ## First convert the (N * n, d)-matrix U to an (N, n, d)-array but in
+    ## the right way (array(U, dim = c(N, n, d)) would use the U's in the
+    ## wrong order)
+    U. <- aperm(array(U, dim = c(n, N, d)), perm = c(2,1,3))
+    ## Now compare
+    stopifnot(all.equal(U.Z.X, U., check.attributes = FALSE))
+    stopifnot(all.equal(U.Z.S, U., check.attributes = FALSE))
 }
 
-## Generate paths from a Brownian bridge
-N <- 100
-B <- rBrownian(N, t = t, type = "BB")
 \donttest{
+    ## Generate dependent GBM sample paths with quasi-random numbers
+    library(qrng)
+    set.seed(271)
+    U.. <- cCopula(to_array(sobol(N, d = d * n, randomize = "digital.shift"), f = n),
+                   copula = tcop, inverse = TRUE)
+    S. <- rBrownian(N, t = t, d = d, U = U.., drift = drift, vola = vola,
+                    type = "GBM", init = init)
+    pairs(S [,2,], gap = 0) # pseudo-samples at t_1
+    pairs(S.[,2,], gap = 0) # quasi-samples at t_1
+    pairs(S [,n+1,], gap = 0) # pseudo-samples at t_n
+    pairs(S.[,n+1,], gap = 0) # quasi-samples at t_n
+}
+
+\donttest{
+    ## Generate paths from a Brownian bridge
+    B <- rBrownian(N, t = t, type = "BB")
     plot(NA, xlim = 0:1, ylim = range(B),
          xlab = "Time t", ylab = expression("Brownian bridge path"~(B[t])))
     for(i in 1:N)
