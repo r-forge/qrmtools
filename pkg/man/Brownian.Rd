@@ -90,10 +90,12 @@ U.Z.X <- pnorm(Z.X) # map to copula sample
 U.Z.S <- pnorm(Z.S) # map to copula sample
 stopifnot(all.equal(U.Z.X, U.Z.S)) # sanity check
 ## Visual check
-pairs(U.Z.X[,1,], gap = 0, pch = ".") # check at the first time point of the BM
-pairs(U.Z.X[,n,], gap = 0, pch = ".") # check at the last time point of the BM
-pairs(U.Z.S[,1,], gap = 0, pch = ".") # check at the first time point of the GBM
-pairs(U.Z.S[,n,], gap = 0, pch = ".") # check at the last time point of the GBM
+if(FALSE) {
+    pairs(U.Z.X[,1,], gap = 0, pch = ".") # check at the first time point of the BM
+    pairs(U.Z.X[,n,], gap = 0, pch = ".") # check at the last time point of the BM
+    pairs(U.Z.S[,1,], gap = 0, pch = ".") # check at the first time point of the GBM
+    pairs(U.Z.S[,n,], gap = 0, pch = ".") # check at the last time point of the GBM
+}
 ## Numerical check
 ## First convert the (N * n, d)-matrix U to an (N, n, d)-array but in
 ## the right way (array(U, dim = c(N, n, d)) would use the U's in the
@@ -110,17 +112,21 @@ U.. <- cCopula(to_array(sobol(N, d = d * n, randomize = "digital.shift"), f = n)
                copula = tcop, inverse = TRUE)
 S. <- rBrownian(N, t = t, d = d, U = U.., drift = drift, vola = vola,
                 type = "GBM", init = init)
-pairs(S [,2,], gap = 0, pch = ".") # pseudo-samples at t_1
-pairs(S.[,2,], gap = 0, pch = ".") # quasi-samples at t_1
-pairs(S [,n+1,], gap = 0, pch = ".") # pseudo-samples at t_n
-pairs(S.[,n+1,], gap = 0, pch = ".") # quasi-samples at t_n
+if(FALSE) {
+    pairs(S [,2,], gap = 0, pch = ".") # pseudo-samples at t_1
+    pairs(S.[,2,], gap = 0, pch = ".") # quasi-samples at t_1
+    pairs(S [,n+1,], gap = 0, pch = ".") # pseudo-samples at t_n
+    pairs(S.[,n+1,], gap = 0, pch = ".") # quasi-samples at t_n
+}
 
 ## Generate paths from a Brownian bridge
 N <- 100
 B <- rBrownian(N, t = t, type = "BB")
-plot(NA, xlim = 0:1, ylim = range(B),
-     xlab = "Time t", ylab = expression("Brownian bridge path"~(B[t])))
-for(i in 1:N)
-    lines(t, B[i,,], col = adjustcolor("black", alpha.f = 25/N))
+if(FALSE) {
+    plot(NA, xlim = 0:1, ylim = range(B),
+         xlab = "Time t", ylab = expression("Brownian bridge path"~(B[t])))
+    for(i in 1:N)
+        lines(t, B[i,,], col = adjustcolor("black", alpha.f = 25/N))
+}
 }
 \keyword{datagen}
