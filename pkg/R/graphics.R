@@ -241,6 +241,10 @@ step_plot <- function(x, y, y0 = NA, x0 = NA, x1 = NA, method = c("edf", "eqf"),
     ord <- order(as.numeric(x))
     x. <- x[ord]
     y. <- y[ord] # order as x to not mess up function
+    if(!is.na(x0) && x0 > x.[1])
+        stop("'x0' must be less than or equal to the smallest x")
+    if(!is.na(x1) && x1 < x.[nx])
+        stop("'x1' must be greater than or equal to the largest x")
 
     ## Verticals and points
     stopifnot(is.logical(verticals), is.logical(do.points))
@@ -251,6 +255,8 @@ step_plot <- function(x, y, y0 = NA, x0 = NA, x1 = NA, method = c("edf", "eqf"),
         if((verticals && is.na(y0)) || (!is.na(x0) && is.na(y0)))
             stop("'y0' needs to be provided") # ... as we otherwise cannot plot the first vertical line
     }
+    if(!is.na(y0) && y0 > min(y.))
+        stop("'y0' must be less than or equal to the smallest y")
 
     ## Determine x values
     x.. <- c(x0, x., x1) # extend (possibly by NA)
