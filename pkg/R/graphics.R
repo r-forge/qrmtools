@@ -238,7 +238,6 @@ step_plot <- function(x, y, y0 = NA, x0 = NA, x1 = NA, method = c("edf", "eqf"),
     if(nx != ny)
         stop("'x' and 'y' need to be numeric vectors of the same length")
     n <- nx
-    stopifnot(n >= 2) # as we remove points in segments() below
     ord <- order(as.numeric(x))
     x. <- x[ord]
     y. <- y[ord] # order as x to not mess up function
