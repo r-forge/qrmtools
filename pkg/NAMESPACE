@@ -65,8 +65,8 @@ export(
     "get_data",
     "hierarchical_matrix",
     ## Risk measures
-    "VaR_np", "VaR_t", "VaR_GPD", "VaR_Par", "VaR_GPDtail",
-    "ES_np", "ES_t", "ES_GPD", "ES_Par", "ES_GPDtail",
+    "VaR_np", "VaR_t", "VaR_t01", "VaR_GPD", "VaR_Par", "VaR_GPDtail",
+    "ES_np", "ES_t", "ES_t01", "ES_GPD", "ES_Par", "ES_GPDtail",
     "RVaR_np",
     "gVaR", "gEX",
     ## Tests

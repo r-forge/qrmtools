@@ -124,19 +124,20 @@ matrix_density_plot <- function(x, xlab = "Entries in the lower triangular matri
 ##' @title P-P Plot
 ##' @param x data (a vector of convertible to such)
 ##' @param FUN hypothesized *distribution* function
+##' @param pch plot symbol
 ##' @param xlab x-axis label
 ##' @param ylab y-axis label
 ##' @param ... additional arguments passed to the underlying plot()
 ##' @return invisible()
 ##' @author Marius Hofert
 ##' @note as.vector() required since sort(x) == x for an 'xts' object!
-pp_plot <-  function(x, FUN = pnorm,
+pp_plot <-  function(x, FUN = pnorm, pch = 20,
                      xlab = "Theoretical probabilities", ylab = "Sample probabilities",
                      ...)
 {
     p <- ppoints(length(x)) # theoretical probabilities of sorted data
     y <- FUN(sort(as.vector(x))) # hypothesized quantiles of sorted data
-    plot(p, y, xlab = xlab, ylab = ylab, ...)
+    plot(p, y, pch = pch, xlab = xlab, ylab = ylab, ...)
     abline(a = 0, b = 1)
     invisible()
 }
@@ -144,9 +145,6 @@ pp_plot <-  function(x, FUN = pnorm,
 ##' @title Q-Q Plot
 ##' @param x data (a vector or convertible to such)
 ##' @param FUN hypothesized *quantile* function (vectorized)
-##' @param xlab x-axis label
-##' @param ylab y-axis label
-##' @param do.qqline logical indicating whether a Q-Q line is plotted
 ##' @param method method used to construct the Q-Q line:
 ##'        "theoretical": theoretically true line which helps
 ##'                       deciding whether x comes from exactly
@@ -165,8 +163,12 @@ pp_plot <-  function(x, FUN = pnorm,
 ##'        qq_plot(z., qnorm) # not fine
 ##'        qq_plot((z.-mean(z.))/sd(z.), qnorm) # fine again
 ##'        qq_plot(z., qnorm, method = "empirical") # fine again
+##' @param pch plot symbol
+##' @param do.qqline logical indicating whether a Q-Q line is plotted
 ##' @param qqline.args list containing additional arguments passed to the
 ##'        underlying abline() functions
+##' @param xlab x-axis label
+##' @param ylab y-axis label
 ##' @param ... additional arguments passed to the underlying plot()
 ##' @return invisible()
 ##' @author Marius Hofert
@@ -182,14 +184,15 @@ pp_plot <-  function(x, FUN = pnorm,
 ##'         slope <- diff(y) / diff(x)
 ##'         int <- y[1] - slope * x[1]
 ##'         abline(a = int, b = slope)
-qq_plot <-  function(x, FUN = qnorm, xlab = "Theoretical quantiles", ylab = "Sample quantiles",
-                     do.qqline = TRUE, method = c("theoretical", "empirical"),
-                     qqline.args = NULL, ...)
+qq_plot <-  function(x, FUN = qnorm, method = c("theoretical", "empirical"),
+                     pch = 20, do.qqline = TRUE, qqline.args = NULL,
+                     xlab = "Theoretical quantiles", ylab = "Sample quantiles",
+                     ...)
 {
     x. <- x[!is.na(x)] # grab out non-NA data
     q <- FUN(ppoints(length(x.))) # theoretical quantiles of sorted data
     y <- sort(as.vector(x.)) # compute order statistics (sample quantiles)
-    plot(q, y, xlab = xlab, ylab = ylab, ...)
+    plot(q, y, pch = pch, xlab = xlab, ylab = ylab, ...)
     if(do.qqline) {
         method <- match.arg(method)
         switch(method,
@@ -222,9 +225,9 @@ qq_plot <-  function(x, FUN = qnorm, xlab = "Theoretical quantiles", ylab = "Sam
 ##' @param main title
 ##' @param xlab x-axis label
 ##' @param ylab y-axis label
-##' @param plot.args additional arguments passed to the underlying plot()
-##' @param segments.args additional arguments passed to the underlying segments()
-##' @param points.args additional arguments passed to the underlying points()
+##' @param plot.args list with additional arguments passed to the underlying plot()
+##' @param segments.args list with additional arguments passed to the underlying segments()
+##' @param points.args list with additional arguments passed to the underlying points()
 ##' @return nothing (plot by side-effect)
 ##' @author Marius Hofert
 step_plot <- function(x, y, y0 = NA, x0 = NA, x1 = NA, method = c("edf", "eqf"), log = "",
@@ -295,6 +298,8 @@ step_plot <- function(x, y, y0 = NA, x0 = NA, x1 = NA, method = c("edf", "eqf"),
         do.call(segments, args = sgmts.args.) # vertical segments
     }
     if(do.points) {
+        nms <- if(is.null(points.args)) "" else names(points.args)
+        if(!grepl("pch", nms)) points.args <- c(list(pch = 20), points.args)
         pnts.args <- c(list(x = x., y = y., col = col), points.args)
         do.call(points, args = pnts.args) # only put points where original data was, not extended one
     }
