@@ -18,7 +18,7 @@ VaR_np <- function(x, level, names = FALSE, type = 1, ...)
     quantile(if(is.matrix(x)) rowSums(x) else x, # compute VaR of the sum if a matrix is provided
              probs = level, names = names, type = type, ...) # vectorized in level
 
-##' @title Value-at-Risk for Normal and t Distributions
+##' @title Value-at-Risk for the t Distribution
 ##' @param level confidence level alpha
 ##' @param loc location mu
 ##' @param scale scale sigma
@@ -29,6 +29,19 @@ VaR_t <- function(level, loc = 0, scale = 1, df = Inf)
 {
     stopifnot(0 <= level, level <= 1, scale > 0, df > 0)
     loc + scale * if(identical(df, Inf)) qnorm(level) else qt(level, df = df)
+}
+
+##' @title Value-at-Risk for the Standardized t Distribution
+##' @param level confidence level alpha
+##' @param df degrees of freedom; Inf for the normal distribution
+##' @return Value-at-Risk
+##' @author Marius Hofert
+VaR_t01 <- function(level, df = Inf)
+{
+    if(df <= 2)
+        stop("Standardized t distribution requires df > 2")
+    c <- if(identical(df, Inf)) 1 else sqrt((df-2)/df)
+    c * VaR_t(level, df = df)
 }
 
 ##' @title Value-at-Risk for the GPD
@@ -106,7 +119,7 @@ ES_np <- function(x, level, method = c(">", ">="), verbose = FALSE, ...)
     }, NA_real_)
 }
 
-##' @title Expected Shortfall for Normal and t Distributions
+##' @title Expected Shortfall for the t Distribution
 ##' @param level confidence level alpha
 ##' @param loc location mu
 ##' @param scale scale sigma
@@ -118,6 +131,20 @@ ES_t <- function(level, loc = 0, scale = 1, df = Inf)
     stopifnot(0 <= level, level <= 1, scale > 0, df > 0)
     loc + (scale/(1-level)) * if(identical(df, Inf)) dnorm(qnorm(level)) else
     dt(qt(level, df = df), df = df) * (df + qt(level, df = df)^2) / (df-1)
+}
+
+##' @title Expected Shortfall for Standardized t Distribution
+##' @param level confidence level alpha
+##' @param df degrees of freedom; Inf for the normal distribution
+##' @return Expected shortfall
+##' @author Marius Hofert
+##' @note Because the quantile function scales with c, so does ES
+ES_t01 <- function(level, df = Inf)
+{
+    if(df <= 2)
+        stop("Standardized t distribution requires df > 2")
+    c <- if(identical(df, Inf)) 1 else sqrt((df-2)/df)
+    c * ES_t(level, df = df)
 }
 
 ##' @title Expected Shortfall for the GPD
