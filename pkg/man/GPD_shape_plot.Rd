@@ -13,7 +13,7 @@ GPD_shape_plot(x, thresholds = seq(quantile(x, 0.5), quantile(x, 0.99),
                xlab2 = "Excesses", plot = TRUE, ...)
 }
 \arguments{
-  \item{x}{\code{\link{numeric}} vector of data.}
+  \item{x}{\code{\link{vector}} of \code{\link{numeric}} data.}
   \item{thresholds}{\code{\link{numeric}} vector of thresholds for which
     to fit a GPD to the excesses.}
   \item{estimate.cov}{\code{\link{logical}} indicating whether
@@ -45,5 +45,5 @@ set.seed(271)
 X <- rt(1000, df = 3.5)
 GPD_shape_plot(X)
 }
-\keyword{parametric}
+\keyword{distribution}
 \keyword{hplot}

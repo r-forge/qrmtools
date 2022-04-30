@@ -138,7 +138,7 @@ GPD_shape_plot <- function(x, thresholds = seq(quantile(x, 0.5), quantile(x, 0.9
     xi <- sapply(fits, function(f) f$par[["shape"]])
     if(estimate.cov) {
         xi.SE <- sapply(fits, function(f) f$SE[["shape"]])
-        q <- qnorm(1 - (1 - conf.level)/2)
+        q <- qnorm(1-(1-conf.level)/2)
         xi.CI.low <- xi - xi.SE * q
         xi.CI.up  <- xi + xi.SE * q
         ylim <- range(xi, xi.CI.low, xi.CI.up)

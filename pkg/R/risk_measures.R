@@ -115,7 +115,7 @@ ES_np <- function(x, level, method = c(">", ">="), verbose = FALSE, ...)
                 warning("Only ",num," losses ",method," VaR")
             }
         }
-        mean(x[ind]) # mean over all losses >(=) VaR
+        mean(x[ind]) # mean over only those losses >(=) VaR (= E(L; L > VaR(L)) / (1-alpha))
     }, NA_real_)
 }
 
@@ -183,10 +183,11 @@ ES_Par <- function(level, shape, scale = 1)
 ##' @author Marius Hofert
 ES_GPDtail <- function(level, threshold, p.exceed, shape, scale)
 {
-    stopifnot(shape < 1, scale > 0) # rest checked in VaR_POT()
     VaR <- VaR_GPDtail(level, threshold = threshold, p.exceed = p.exceed,
-                       shape = shape, scale = scale)
-    (VaR + scale - shape * threshold) / (1 - shape)
+                       shape = shape, scale = scale) # does checks
+    res <- (VaR + scale - shape * threshold) / (1 - shape)
+    res[shape >= 1] <- Inf
+    res
 }
 
 

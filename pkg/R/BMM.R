@@ -36,7 +36,7 @@ GEV_shape_plot <- function(x, blocksize = tail(pretty(seq_len(length(x)/20), n =
     xi <- sapply(fits, function(f) f$par[["shape"]])
     if(estimate.cov) {
         xi.SE <- sapply(fits, function(f) f$SE[["shape"]])
-        q <- qnorm(1 - (1 - conf.level)/2)
+        q <- qnorm(1-(1-conf.level)/2)
         xi.CI.low <- xi - xi.SE * q
         xi.CI.up  <- xi + xi.SE * q
         ylim <- range(xi, xi.CI.low, xi.CI.up)
