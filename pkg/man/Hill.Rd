@@ -10,8 +10,8 @@ Hill_estimator(x, k = c(10, length(x)), conf.level = 0.95)
 Hill_plot(x, k = c(10, length(x)), conf.level = 0.95, Hill.estimator = NULL,
           log = "x", xlim = NULL, ylim = NULL,
           xlab = "Order statistics", ylab = "Tail index",
-          lines.args = list(), CI.col = adjustcolor(1, alpha.f = 0.2),
-          third.axis = TRUE, tlab = "Empirical probability", ...)
+          CI.col = adjustcolor(1, alpha.f = 0.2), lines.args = list(),
+          xaxis2 = TRUE, xlab2 = "Empirical probability", ...)
 }
 \arguments{
   \item{x}{\code{\link{vector}} of \code{\link{numeric}} data.}
@@ -22,16 +22,16 @@ Hill_plot(x, k = c(10, length(x)), conf.level = 0.95, Hill.estimator = NULL,
   \item{conf.level}{confidence level of the confidence intervals.}
   \item{Hill.estimator}{object as returned by \code{Hill_estimator()}.}
   \item{log, xlim, ylim, xlab, ylab}{see \code{\link{plot}()}.}
+  \item{CI.col}{color of the pointwise asymptotic confidence intervals
+    (CIs); if \code{NA}, no CIs are shown.}
   \item{lines.args}{\code{\link{list}} of additional arguments
     for the underlying \code{\link{lines}()} call to draw the Hill
     estimator.}
-  \item{CI.col}{color of the pointwise asymptotic confidence intervals
-    (CIs); if \code{NA}, no CIs are shown.}
-  \item{third.axis}{\code{\link{logical}} indicating whether a third
+  \item{xaxis2}{\code{\link{logical}} indicating whether a third
     axis is drawn that shows the empirical probabilities
     \code{1-(k-1)/length(x)} corresponding to \code{k}, so the value of
     the column \code{k.prob} as returned by \code{Hill_estimator()}.}
-  \item{tlab}{label of the third axis.}
+  \item{xlab2}{label of the secondary x-axis.}
   \item{\dots}{additional arguments passed to the underlying
     \code{\link{plot}()}.}
 }

@@ -9,7 +9,9 @@
 GPD_shape_plot(x, thresholds = seq(quantile(x, 0.5), quantile(x, 0.99),
                                    length.out = 65),
                estimate.cov = TRUE, conf.level = 0.95,
-               lines.args = list(lty = 2), xlab = "Threshold", ylab = NULL,
+               CI.col = adjustcolor(1, alpha.f = 0.2),
+               lines.args = list(), xlim = NULL, ylim = NULL,
+               xlab = "Threshold", ylab = NULL,
                xlab2 = "Excesses", plot = TRUE, ...)
 }
 \arguments{
@@ -20,10 +22,12 @@ GPD_shape_plot(x, thresholds = seq(quantile(x, 0.5), quantile(x, 0.99),
     confidence intervals are to be computed.}
   \item{conf.level}{confidence level of the confidence intervals if
     \code{estimate.cov}.}
+  \item{CI.col}{color of the pointwise asymptotic confidence intervals
+    (CIs); if \code{NA}, no CIs are shown.}
   \item{lines.args}{\code{\link{list}} of arguments passed to
-    the underlying \code{\link{lines}()} for drawing the confidence intervals.}
-  \item{xlab}{x-axis label.}
-  \item{ylab}{y-axis label (if \code{NULL}, a default is used).}
+    the underlying \code{\link{lines}()} for drawing the shape
+    parameter as a function of the threshold.}
+  \item{xlim, ylim, xlab, ylab}{see \code{\link{plot}()}.}
   \item{xlab2}{label of the secondary x-axis.}
   \item{plot}{\code{\link{logical}} indicating whether a plot is produced.}
   \item{\dots}{additional arguments passed to the underlying

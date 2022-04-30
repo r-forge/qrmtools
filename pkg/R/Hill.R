@@ -65,20 +65,19 @@ Hill_estimator <- function(x, k = c(10, length(x)), conf.level = 0.95)
 ##' @param ylim see ?plot
 ##' @param xlab see ?plot
 ##' @param ylab see ?plot
+##' @param CI.col color of the confidence interval region; can be NA
 ##' @param lines.args arguments passed to the underlying lines()
-##' @param CI.col color of the confidence interval region
-##' @param third.axis logical indicating whether the 3rd axis is
+##' @param xaxis2 logical indicating whether the 3rd axis is
 ##'        plotted
-##' @param tlab label of the third axis
+##' @param xlab2 label of the secondary x-axis
 ##' @param ... additional arguments passed to the underlying plot()
 ##' @return Hill plot (by side-effect)
 ##' @author Marius Hofert
 Hill_plot <- function(x, k = c(10, length(x)), conf.level = 0.95, Hill.estimator = NULL,
                       log = "x", xlim = NULL, ylim = NULL,
                       xlab = "Order statistics", ylab = "Tail index",
-                      lines.args = list(),
-                      CI.col = adjustcolor(1, alpha.f = 0.2),
-                      third.axis = TRUE, tlab = "Empirical probability",
+                      CI.col = adjustcolor(1, alpha.f = 0.2), lines.args = list(),
+                      xaxis2 = TRUE, xlab2 = "Empirical probability",
                       ...)
 {
     ## Ingredients
@@ -99,7 +98,7 @@ Hill_plot <- function(x, k = c(10, length(x)), conf.level = 0.95, Hill.estimator
     do.call(lines, args = c(list(x = k, y = tail.index), lines.args)) # Hill plot
 
     ## Third axis
-    if(third.axis) {
+    if(xaxis2) {
         at <- axTicks(1) # as for x-axis
         labs. <- if(at[1] == 0) {
                      c(1, k.prob[at])
@@ -108,6 +107,6 @@ Hill_plot <- function(x, k = c(10, length(x)), conf.level = 0.95, Hill.estimator
                  }
         labs <- format(signif(labs., 4))
         axis(3, at = at, labels = labs)
-        mtext(tlab, side = 3, line = 3)
+        mtext(xlab2, side = 3, line = 3)
     }
 }
