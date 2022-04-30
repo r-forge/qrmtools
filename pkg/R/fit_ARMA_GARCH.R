@@ -193,3 +193,30 @@ fit_GARCH_11 <- function(x, init = NULL, # z_{cor}, z_{ema}, (d.o.f. nu)
          sig.t = sqrt(sig2.t), # conditional volatility \sigma_t
          Z.t = Z.t) # standardized residuals Z_t
 }
+
+##' @title GARCH(1,1) Tail Index
+##' @param innovations realizations of the innovations Z to estimate the mean
+##'        (obtained, e.g., via rnorm(n) or rt(n, df = nu) * sqrt((nu-2)/nu))
+##' @param alpha1 GARCH(1,1) coefficient, >= 0 with alpha1 + beta1 < 1
+##' @param beta1 GARCH(1,1) coefficient, >= 0 with alpha1 + beta1 < 1
+##' @param interval initial interval for root finding
+##' @param ... additional arguments passed to the underlying uniroot()
+##' @return approximate tail index alpha
+##' @author Marius Hofert
+##' @note - E((alpha_1 * Z^2 + beta_1)^(alpha/2)) = 1 according to
+##'         McNeil et al. (2015, p. 576); see also p. 118, Definition 4.20,
+##'         p. 119, Proposition 4.21
+##'       - For checking:
+##'         a <- seq(0, 10, length.out = 101)
+##'         y <- sapply(a, function(x) f(x))
+##'         plot(a, y, type = "l")
+##'       - Careful: The tail index formula implemented assumes include.mean = FALSE
+##'         (so the GARCH(1,1) has no additional constant mean).
+tail_index_GARCH_11 <- function(innovations, alpha1, beta1,
+                                interval = c(0.01, 100), ...)
+{
+    stopifnot(alpha1 >= 0, beta1 >= 0, alpha1 + beta1 < 1)
+    f <- function(a) mean((alpha1 * innovations^2 + beta1)^(a/2)) - 1
+    uniroot(f, interval = interval, ...)$root
+}
+
