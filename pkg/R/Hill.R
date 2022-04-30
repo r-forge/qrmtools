@@ -1,7 +1,8 @@
 ### Hill estimator #############################################################
 
 ##' @title Hill Estimator
-##' @param x vector of numeric data
+##' @param x vector of numeric data; those x corresponding to k[1]:k[2]
+##'        must be > 0.
 ##' @param k vector of length 2, determining the smallest and largest number
 ##'        of order statistics of x to compute the Hill estimator for (the
 ##'        smallest needs to be >= 2). If of length 1, k is expanded
@@ -20,25 +21,27 @@ Hill_estimator <- function(x, k = c(10, length(x)), conf.level = 0.95)
     if(!is.vector(x)) x <- as.vector(x) # convert time series to vector (otherwise sort() fails)
     n <- length(x)
     if(length(k) == 1) k <- c(k, n)
-    stopifnot(is.numeric(x), x > 0, length(k) == 2, 2 <= k, diff(k) > 0,
+    stopifnot(is.numeric(x), length(k) == 2, 2 <= k, diff(k) > 0,
               0 < conf.level, conf.level < 1)
     if(k[2] > n) # more meaningful error message
         stop("k[2] = ",k[2]," must be <= length(x) = ",n)
 
     ## Build ingredients
-    lx <- sort(log(x), decreasing = TRUE) # sorted in decreasing order
-
-    ## Hill estimator
     k.min <- k[1]
     k.max <- k[2]
     k.ran <- k.min:k.max
     k.prob <- 1 - (k.ran-1) / n # k.ran == 2 corresponds to 1 - 1/n, k.ran = n to 1/n
+    x. <- sort(x, decreasing = TRUE) # sorted in decreasing order
+    if(x.[k.max] <= 0) # check smallest x.
+        stop("sort(x) > 0 violated for some indices in range(k)")
     one.to.k.max <- seq_len(k.max)
-    lx.cmean.k.max <- cumsum(lx[one.to.k.max]) / one.to.k.max # compute all cumulative means from 1 to k.max
-    tail.index <- 1 / (lx.cmean.k.max[k.ran] - lx[k.ran])
+    lx <- log(x.[one.to.k.max]) # fine (all arguments > 0)
 
+    ## Hill estimator
     ## This form is frequently found in the literature (although
     ## EKM (1997, p. 190, Eq. (4.12)) use the one with k ~> k-1)
+    lx.cmean.k.max <- cumsum(lx) / one.to.k.max # compute all cumulative means from 1 to k.max
+    tail.index <- 1 / (lx.cmean.k.max[k.ran] - lx[k.ran])
 
     ## CI (see evir::hill or QRM::hillPlot)
     SE <- tail.index / sqrt(k.ran)

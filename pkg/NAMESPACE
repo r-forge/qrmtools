@@ -28,7 +28,7 @@ importFrom("lattice", "levelplot")
 importFrom("rugarch", "ugarchspec", "ugarchfit")
 importFrom("stats", "quantile", "HoltWinters", "density", "ppoints", "optim")
 importFrom("methods", "is", "existsFunction")
-importFrom("utils", "setTxtProgressBar", "txtProgressBar", "head", "tail")
+importFrom("utils", "head", "tail")
 importFrom("ADGofTest", "ad.test")
 
 
