@@ -207,7 +207,7 @@ fit_GARCH_11 <- function(x, init = NULL, # z_{cor}, z_{ema}, (d.o.f. nu)
 ##' @param beta1 GARCH(1,1) coefficient, >= 0 with alpha1 + beta1 < 1
 ##' @param interval initial interval for root finding
 ##' @param ... additional arguments passed to the underlying uniroot()
-##' @return approximate tail index alpha
+##' @return approximate tail index alpha (or NA if not found)
 ##' @author Marius Hofert
 ##' @note - E((alpha_1 * Z^2 + beta_1)^(alpha/2)) = 1 according to
 ##'         McNeil et al. (2015, p. 576); see also p. 118, Definition 4.20,
@@ -219,10 +219,11 @@ fit_GARCH_11 <- function(x, init = NULL, # z_{cor}, z_{ema}, (d.o.f. nu)
 ##'       - Careful: The tail index formula implemented assumes include.mean = FALSE
 ##'         (so the GARCH(1,1) has no additional constant mean).
 tail_index_GARCH_11 <- function(innovations, alpha1, beta1,
-                                interval = c(0.01, 100), ...)
+                                interval = c(1e-4, 1e4), ...)
 {
-    stopifnot(alpha1 >= 0, beta1 >= 0, alpha1 + beta1 < 1)
+    if(!(alpha1 >= 0 && beta1 >= 0 && alpha1 + beta1 < 1)) NA
     f <- function(a) mean((alpha1 * innovations^2 + beta1)^(a/2)) - 1
-    uniroot(f, interval = interval, ...)$root
+    f. <- f(interval[1])
+    f.. <- f(interval[2])
+    if(f. * f.. >= 0) NA else uniroot(f, interval = interval, ...)$root
 }
-

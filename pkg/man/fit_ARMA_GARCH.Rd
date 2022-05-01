@@ -1,4 +1,4 @@
-\name{ARMA_GARCH}
+\name{fit_ARMA_GARCH}
 \alias{fit_ARMA_GARCH}
 \title{Fitting ARMA-GARCH Processes}
 \description{

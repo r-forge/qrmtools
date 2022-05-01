@@ -10,7 +10,7 @@
 fit_GARCH_11(x, init = NULL, sig2 = mean(x^2), delta = 1,
              distr = c("norm", "st"), control = list(), ...)
 tail_index_GARCH_11(innovations, alpha1, beta1,
-                    interval = c(0.01, 100), ...)
+                    interval = c(1e-4, 1e4), ...)
 }
 \arguments{
   \item{x}{vector of length \eqn{n} containing the data (typically
@@ -69,7 +69,10 @@ tail_index_GARCH_11(innovations, alpha1, beta1,
       McNeil et al. (2015, p. 576), so the \eqn{alpha} which solves
       \deqn{E((\alpha_1 * Z^2 + \beta_1)^(\alpha/2)) = 1}{%
 	E((alpha[1] * Z^2 + \beta[1])^(\alpha/2)) = 1},
-      where \eqn{Z} are the \code{innovations}.
+      where \eqn{Z} are the \code{innovations}. If no solution
+      is found (e.g. if the objective function does not have
+      different sign at the endpoints of \code{interval}),
+      \code{\link{NA}} is returned.
     }
   }
 }
