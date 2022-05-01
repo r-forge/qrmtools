@@ -6,7 +6,7 @@
 }
 \usage{
 fit_ARMA_GARCH(x, ugarchspec.list = ugarchspec(), solver = "hybrid",
-               verbose = TRUE, ...)
+               verbose = FALSE, ...)
 }
 \arguments{
   \item{x}{\code{\link{matrix}}-like data structure, possibly an

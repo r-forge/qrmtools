@@ -13,7 +13,7 @@
 ##' @note The default ugarchspec.list fits an ARMA(1,1)-GARCH(1,1) with N(0,1)
 ##'       standardized residuals
 fit_ARMA_GARCH <- function(x, ugarchspec.list = ugarchspec(), solver = "hybrid",
-                           verbose = TRUE, ...)
+                           verbose = FALSE, ...)
 {
     ## Checking and expanding ugarchspec.list to a list of length d
     if(!is.matrix(x)) x <- cbind(x) # is.matrix() is also true for 'xts' objects
@@ -219,7 +219,7 @@ fit_GARCH_11 <- function(x, init = NULL, # z_{cor}, z_{ema}, (d.o.f. nu)
 ##'       - Careful: The tail index formula implemented assumes include.mean = FALSE
 ##'         (so the GARCH(1,1) has no additional constant mean).
 tail_index_GARCH_11 <- function(innovations, alpha1, beta1,
-                                interval = c(1e-4, 1e4), ...)
+                                interval = c(1e-6, 1e2), ...)
 {
     if(!(alpha1 >= 0 && beta1 >= 0 && alpha1 + beta1 < 1)) NA
     f <- function(a) mean((alpha1 * innovations^2 + beta1)^(a/2)) - 1

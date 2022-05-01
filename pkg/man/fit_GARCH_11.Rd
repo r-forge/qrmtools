@@ -10,7 +10,7 @@
 fit_GARCH_11(x, init = NULL, sig2 = mean(x^2), delta = 1,
              distr = c("norm", "st"), control = list(), ...)
 tail_index_GARCH_11(innovations, alpha1, beta1,
-                    interval = c(1e-4, 1e4), ...)
+                    interval = c(1e-6, 1e2), ...)
 }
 \arguments{
   \item{x}{vector of length \eqn{n} containing the data (typically
