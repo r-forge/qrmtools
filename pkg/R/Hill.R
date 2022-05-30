@@ -102,13 +102,20 @@ Hill_plot <- function(x, k = c(10, length(x)), conf.level = 0.95, Hill.estimator
 
     ## Third axis
     if(xaxis2) {
-        at <- axTicks(1) # as for x-axis
-        labs. <- if(at[1] == 0) {
-                     c(1, k.prob[at])
-                 } else {
-                     k.prob[at]
-                 }
-        labs <- format(signif(labs., 4))
+        ## Get tick locations of first axis
+        at <- axTicks(1) # ticks in same places as x-axis
+
+        ## Determine the corresponding probabilities
+        ## Note: R may round order statistics down ('at' for the smallest:
+        ## 0 instead of 1; 'at' for the largest: >> largest k)
+        labs. <- numeric(length(at)) # same length
+        labs.[at <= 0] <- 1 # probability level 100%
+        labs.[at > max(k)] <- 0 # probability level 0%
+        ii <- 0 < at & at <= max(k) # indices for which we have probabilities corresponding to k
+        labs.[ii] <- k.prob[at[ii]]
+        labs <- format(signif(labs., 4)) # round (fine)
+
+        ## Plot third axis
         axis(3, at = at, labels = labs)
         mtext(xlab2, side = 3, line = 3)
     }
