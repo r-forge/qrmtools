@@ -13,7 +13,7 @@ returns_qrmtools(x, method = c("logarithmic", "simple", "diff"),
                  inverse = FALSE, start, start.date)
 }
 \arguments{
-  \item{x}{matrix or vector (possibly a \code{xts} object) to be turned
+  \item{x}{matrix or vector (possibly a \code{\link[xts]{xts}} object) to be turned
     into returns (if \code{inverse = FALSE})
     or returns to be turned into the original data (if \code{inverse =
       TRUE}).}
@@ -28,7 +28,7 @@ returns_qrmtools(x, method = c("logarithmic", "simple", "diff"),
     of the time series to be constructed from the given returns \code{x}.}
   \item{start.date}{\code{\link{character}} or \code{\link{Date}} object
     to be used as the date corresponding to the value \code{start};
-    currently only used for \code{\link{xts}} objects.}
+    currently only used for \code{\link[xts]{xts}} objects.}
 }
 \value{
   \code{\link{vector}} or \code{\link{matrix}} with the same number of
@@ -36,8 +36,8 @@ returns_qrmtools(x, method = c("logarithmic", "simple", "diff"),
   or one row more if \code{inverse = TRUE}.
 }
 \details{
-  If \code{inverse = FALSE} and \code{x} is an \code{xts} object, the
-  returned object is an \code{xts}, too.
+  If \code{inverse = FALSE} and \code{x} is an \code{\link[xts]{xts}}
+  object, the returned object is an \code{\link[xts]{xts}}, too.
 
   Note that the \R package \pkg{timeSeries} also contains a function
   \code{returns()} (and hence the order in which \pkg{timeSeries} and

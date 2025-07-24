@@ -20,7 +20,7 @@ get_data(x, from = NULL, to = NULL,
     the last date with available data is picked.}
   \item{src}{character string specifying the data source
     (e.g. \code{"yahoo"} for stocks or \code{"oanda"} for FX data);
-    see \code{\link{getSymbols}()} and \code{\link{Quandl}()}.}
+    see \code{\link[quantmod]{getSymbols}()} and \code{\link[Quandl]{Quandl}()}.}
   \item{FUN}{\code{\link{function}} to be applied to the data before
     being returned. This can be
     \describe{
@@ -28,9 +28,9 @@ get_data(x, from = NULL, to = NULL,
 	thus replaced by \code{\link{NA}});}
       \item{the given \code{FUN}:}{if \code{FUN} has been provided;}
       \item{a useful default:}{if \code{FUN = NULL}; the default uses
-	the adjusted close price \code{\link{Ad}()} if
+	the adjusted close price \code{\link[quantmod]{Ad}()} if
 	\code{src = "yahoo"},
-	the close price \code{\link{Cl}()} if
+	the close price \code{\link[quantmod]{Cl}()} if
 	\code{src = "google"} and the identity otherwise.}
     }}
   \item{verbose}{\code{\link{logical}} indicating whether progress
@@ -38,8 +38,8 @@ get_data(x, from = NULL, to = NULL,
   \item{warn}{\code{\link{logical}} indicating whether a warning
     is given showing the error message when fetching \code{x} fails.}
   \item{\dots}{additional arguments passed to the underlying
-    \code{\link{getSymbols}()} from \pkg{quantmod} or
-    \code{\link{Quandl}()} from \pkg{Quandl} (if \code{src = "quandl"}).}
+    \code{\link[quantmod]{getSymbols}()} from \pkg{quantmod} or
+    \code{\link[Quandl]{Quandl}()} from \pkg{Quandl} (if \code{src = "quandl"}).}
 }
 \value{
   \code{xts} object containing the data with column name(s)
@@ -48,11 +48,14 @@ get_data(x, from = NULL, to = NULL,
   data is not available.
 }
 \details{
-  \code{FUN} is typically one of \pkg{quantmod}'s \code{\link{Op}},
-  \code{\link{Hi}}, \code{\link{Lo}}, \code{\link{Cl}}, \code{\link{Vo}},
-  \code{\link{Ad}} or one of the combined functions \code{\link{OpCl}},
-  \code{\link{ClCl}}, \code{\link{HiCl}}, \code{\link{LoCl}}, \code{\link{LoHi}},
-  \code{\link{OpHi}}, \code{\link{OpLo}}, \code{\link{OpOp}}.
+  \code{FUN} is typically one of \pkg{quantmod}'s \code{\link[quantmod]{Op}},
+  \code{\link[quantmod]{Hi}}, \code{\link[quantmod]{Lo}},
+  \code{\link[quantmod]{Cl}}, \code{\link[quantmod]{Vo}},
+  \code{\link[quantmod]{Ad}} or one of the combined functions
+  \code{\link[quantmod]{OpCl}}, \code{\link[quantmod]{ClCl}},
+  \code{\link[quantmod]{HiCl}}, \code{\link[quantmod]{LoCl}},
+  \code{\link[quantmod]{LoHi}}, \code{\link[quantmod]{OpHi}},
+  \code{\link[quantmod]{OpLo}}, \code{\link[quantmod]{OpOp}}.
 }
 \author{Marius Hofert}
 \examples{

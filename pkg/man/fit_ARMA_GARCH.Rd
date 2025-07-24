@@ -20,7 +20,7 @@ fit_ARMA_GARCH(x, ugarchspec.list = ugarchspec(), solver = "hybrid",
   \item{verbose}{\code{\link{logical}} indicating whether verbose
     output is given.}
   \item{\dots}{additional arguments passed to the underlying
-    \code{\link{ugarchfit}()}.}
+    \code{\link[rugarch]{ugarchfit}()}.}
 }
 \value{
   If \code{x} consists of one column only (e.g. a vector),

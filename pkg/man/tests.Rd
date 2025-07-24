@@ -16,7 +16,7 @@ mardia_test(x, type = c("kurtosis", "skewness"), method = c("direct", "chol"))
   \item{type}{\code{\link{character}} string indicating the type of test:
     \describe{
       \item{\code{"ad.test"}:}{Anderson-Darling test as computed by the
-	underlying \code{\link{ad.test}()}.}
+	underlying \code{\link[ADGofTest]{ad.test}()}.}
       \item{\code{"ks.test"}:}{Kolmogorov-Smirnov test as computed by the
 	underlying \code{\link{ks.test}()}.}
       \item{\code{"kurtosis"}:}{Mardia's kurtosis test (based on Mahalanobis
@@ -28,11 +28,12 @@ mardia_test(x, type = c("kurtosis", "skewness"), method = c("direct", "chol"))
   \item{dist}{distribution to check against.}
   \item{method}{method for computing the Mahalanobis angles.}
   \item{\dots}{additional arguments passed to the underlying
-    \code{\link{ad.test}()} or \code{\link{ks.test}()}.}
+    \code{\link[ADGofTest]{ad.test}()} or \code{\link{ks.test}()}.}
 }
 \value{
   An \code{htest} object (for \code{maha2_test} the one returned
-  by the underlying \code{\link{ad.test}()} or \code{\link{ks.test}()}).
+  by the underlying \code{\link[ADGofTest]{ad.test}()} or
+  \code{\link{ks.test}()}).
 }
 \author{Marius Hofert}
 \examples{
