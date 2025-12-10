@@ -8,7 +8,7 @@ useDynLib(qrmtools, .registration = TRUE)
 importFrom("quantmod", "getSymbols",
            "Op", "Hi", "Lo", "Cl", "Vo", "Ad",
            "OpCl", "ClCl", "HiCl", "LoCl", "LoHi", "OpHi", "OpLo", "OpOp")
-importFrom("Quandl", "Quandl")
+## importFrom("Quandl", "Quandl") Archived on 2026-01-13
 importFrom("zoo", "index")
 importFrom("xts", "as.xts")
 importFrom("methods", "hasArg")

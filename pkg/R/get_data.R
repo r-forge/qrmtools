@@ -1,6 +1,6 @@
 ### Tools for working with data sets ###########################################
 
-##' @title Download data via quantmod's getSymbols() or Quandl's Quandl()
+##' @title Download data via quantmod's getSymbols()
 ##' @param x vector of, for example, ticker symbols (if src = "yahoo") or
 ##'        "EUR/USD" if (src = "oanda")
 ##' @param from start date as character string (e.g. 2015-01-01); if NULL,
@@ -15,7 +15,7 @@
 ##' @param verbose logical indicating whether progress monitoring is done
 ##' @param warn logical indicating whether a warning is given showing the error
 ##'        message when fetching x fails
-##' @param ... additional arguments passed to getSymbols() or Quandl()
+##' @param ... additional arguments passed to getSymbols()
 ##' @return (n, d)-matrix of data (an xts object)
 ##' @author Marius Hofert
 ##' @note - One could do...
@@ -32,7 +32,8 @@
 ##'            whole data is downloaded first -- so only use this hack for FRED
 ##'            (= Federal Reserve Economic Data) data)
 get_data <- function(x, from = NULL, to = NULL,
-                     src = c("yahoo", "quandl", "oanda", "FRED", "google"),
+                     src = c("yahoo", # "quandl", # no data available anymore for free
+                             "oanda", "FRED", "google"),
                      FUN = NULL, verbose = TRUE, warn = TRUE, ...)
 {
     ## Checking
@@ -71,13 +72,15 @@ get_data <- function(x, from = NULL, to = NULL,
         } else { # if src != "oanda" or "oanda" but only one block, we can get it directly
             if(!is.character(from)) from <- as.character(from)
             if(!is.character(to)) to <- as.character(to)
-            dat <- if(src == "quandl") { # quandl
-                tryCatch(Quandl(x, type = "xts", start_date = from, end_date = to, ...),
-                         error = function(e) e)
-            } else { # !quandl
-                tryCatch(getSymbols(x, from = from, to = to, src = src, auto.assign = FALSE, ...),
-                         error = function(e) e)
-            }
+            dat <-
+                ## Archived (not working anymore) due to Quandl being archived
+                ## if(src == "quandl") { # quandl
+                ##     tryCatch(Quandl(x, type = "xts", start_date = from, end_date = to, ...),
+                ##              error = function(e) e)
+                ## } else { # !quandl
+                    tryCatch(getSymbols(x, from = from, to = to, src = src, auto.assign = FALSE, ...),
+                             error = function(e) e)
+                ## }
             if(is(dat, "simpleError")) {
                 if(warn) warning("Error when fetching ",x,": ",conditionMessage(dat)," (will use NA instead)")
                 dat <- NA

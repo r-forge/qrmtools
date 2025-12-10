@@ -6,7 +6,7 @@
 }
 \usage{
 get_data(x, from = NULL, to = NULL,
-         src = c("yahoo", "quandl", "oanda", "FRED", "google"),
+         src = c("yahoo", "oanda", "FRED", "google"),
          FUN = NULL, verbose = TRUE, warn = TRUE, ...)
 }
 \arguments{
@@ -20,7 +20,7 @@ get_data(x, from = NULL, to = NULL,
     the last date with available data is picked.}
   \item{src}{character string specifying the data source
     (e.g. \code{"yahoo"} for stocks or \code{"oanda"} for FX data);
-    see \code{\link[quantmod]{getSymbols}()} and \code{\link[Quandl]{Quandl}()}.}
+    see \code{\link[quantmod]{getSymbols}()}.}
   \item{FUN}{\code{\link{function}} to be applied to the data before
     being returned. This can be
     \describe{
@@ -38,8 +38,7 @@ get_data(x, from = NULL, to = NULL,
   \item{warn}{\code{\link{logical}} indicating whether a warning
     is given showing the error message when fetching \code{x} fails.}
   \item{\dots}{additional arguments passed to the underlying
-    \code{\link[quantmod]{getSymbols}()} from \pkg{quantmod} or
-    \code{\link[Quandl]{Quandl}()} from \pkg{Quandl} (if \code{src = "quandl"}).}
+    \code{\link[quantmod]{getSymbols}()} from \pkg{quantmod}.}
 }
 \value{
   \code{xts} object containing the data with column name(s)
