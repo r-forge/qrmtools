@@ -4,6 +4,15 @@
 \title{News for \R Package \pkg{qrmtools}}
 \newcommand{\CRANpkg}{\href{https://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 
+\section{Changes in version 0.0-18}{
+  \subsection{Bug Fixes}{
+    \itemize{
+      \item Archived \code{"quandl"} source in \code{get_data()} due to
+            abandoned package Quandl.
+    }
+  }
+}
+
 \section{Changes in version 0.0-15}{
   \subsection{New Features}{
     \itemize{
